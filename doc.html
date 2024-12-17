@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación UpPing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #131313;
+        margin: 0;
+        padding: 20px;
+    }
+    h1, h2, h3 {
+        color: #333;
+    }
+    img{
+        display: block;
+        margin: 20px auto;
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 2.5em;
+        padding-bottom: 10px;
+    }
+    .container {
+        max-width: 800px;
+        margin: auto;
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        transition: box-shadow 0.3s ease;
+    }
+    .container:hover {
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+    code {
+        background-color: #eaeaea;
+        padding: 2px 4px;
+        border-radius: 4px;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    li {
+        margin: 15px 0;
+        padding: 10px;
+        background: #f9f9f9;
+        border-left: 4px solid #1bd575;
+        border-radius: 4px;
+        transition: background 0.3s;
+    }
+    li:hover {
+        background: #e9ecef;
+    }
+    footer {
+        text-align: center;
+        margin-top: 30px;
+        font-size: 0.9em;
+        color: #777;
+    }
+    footer p {
+        margin: 5px 0;
+    }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="public/img/color.png">
+    <h1>Documentación UpPing</h1>
+    <h2>Descripción</h2>
+    <p>Este proyecto es una aplicación de monitoreo de dominios que permite verificar el estado y el tiempo de respuesta de diferentes dominios o direcciones IP.</p>
+
+    <h2>Dependencias</h2>
+    <h3>Dependencias</h3>
+    <ul>
+        <li>
+            <strong>express</strong>: Framework web para Node.js que facilita la creación de aplicaciones web y APIs.
+ <br><code>npm install express</code>
+        </li>
+        <li>
+            <strong>mongoose</strong>: ODM (Object Data Modeling) para MongoDB y Node.js, que proporciona una solución basada en esquemas para modelar los datos de la aplicación.
+            <br><code>npm install mongoose</code>
+        </li>
+        <li>
+            <strong>body-parser</strong>: Middleware para manejar datos de formularios y JSON en las solicitudes HTTP.
+            <br><code>npm install body-parser</code>
+        </li>
+        <li>
+            <strong>dotenv</strong>: Carga variables de entorno desde un archivo <code>.env</code> a <code>process.env</code>.
+            <br><code>npm install dotenv</code>
+        </li>
+        <li>
+            <strong>ping</strong>: Librería para hacer ping a direcciones IP o dominios.
+            <br><code>npm install ping</code>
+        </li>
+    </ul>
+
+    <h3>Dependencias de Desarrollo</h3>
+    <ul>
+        <li>
+            <strong>nodemon</strong>: Herramienta que ayuda a desarrollar aplicaciones basadas en Node.js al reiniciar automáticamente la aplicación cuando se detectan cambios en los archivos.
+            <br><code>npm install --save-dev nodemon</code>
+        </li>
+    </ul>
+
+    <h2>Uso</h2>
+    <p>Para iniciar el proyecto, asegúrate de tener todas las dependencias instaladas y luego ejecuta:</p>
+    <code>npm start</code>
+
+    <h2>Arquitectura del Proyecto</h2>
+    <p>La arquitectura del proyecto está organizada de la siguiente manera:</p>
+    <ul>
+        <li>
+            <strong>app.js</strong>: Archivo principal de la aplicación que configura el servidor Express y las rutas.
+        </li>
+        <li>
+            <strong>modelos/</strong>: Contiene los modelos de datos de Mongoose.
+            <ul>
+                <li><strong>Dominio.js</strong>: Modelo que define la estructura de los documentos de dominio en la base de datos.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>controladores/</strong>: Contiene la lógica de negocio y las funciones que manejan las solicitudes.
+            <ul>
+                <li><strong>dominioControlador.js</strong>: Controlador que maneja las operaciones relacionadas con los dominios, como agregar, obtener y eliminar dominios.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>rutas/</strong>: Define las rutas de la API y las conecta con los controladores.
+            <ul>
+                <li><strong>dominioRutas.js</strong>: Archivo que define las rutas relacionadas con los dominios.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>public/</strong>: Contiene los archivos estáticos que se sirven al cliente, como HTML, CSS y JavaScript.
+            <ul>
+                <li><strong>styles/</strong>: Carpeta que contiene los archivos CSS para el estilo de la aplicación.</li>
+                <li><strong>js/</strong>: Carpeta que contiene los archivos JavaScript para la funcionalidad del lado del cliente.</li>
+                <li><strong>img/</strong>: Carpeta que contiene las imágenes utilizadas en la aplicación.</li>
+                <li><strong>dominios.html</strong>: Página que muestra la lista de dominios.</li>
+                <li><strong>detalle.html</strong>: Página que muestra los detalles de un dominio específico.</li>
+                <li><strong>index.html</strong>: Página de inicio de la aplicación.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <footer>
+        <p>&copy; 2025 UpPing. Todos los derechos reservados.</p>
+    </footer>
+</div>
+
+</body>
+</html>
