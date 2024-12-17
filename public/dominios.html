@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Dominios</title>
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link href="../styles/style-alertas.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a class="navbar-brand" href="/">
+            <img src="/img/logo.png" alt="Logo" style="width: 130px;">
+        </a>
+        <div class="navbar-nav">
+            <a class="nav-link" href="/">Inicio</a>
+            <a class="nav-link" href="/dominios">Dominios</a>
+            <a class="nav-link" href="/contacto">Contacto</a>
+            <a class="nav-link" href="/perfil">
+                <i class="fas fa-user"></i> Perfil
+            </a>
+        </div>
+    </nav>
+
+
+    <img class="img-banner-head" src="/img/banner-panel-2.gif">
+
+    <div class="container">
+<!-- Modal -->
+<div id="formModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <h2>Agregar Dominio o IP</h2>
+        <form id="formAgregarDominio">
+            <div>
+                <label for="nombreDominio">Nombre del Dominio o Host</label>
+                <input type="text" id="nombreDominio" placeholder="Nombre del dominio o Host" required>
+            </div>
+            <div>
+                <label for="nombreDominio">Alias (opcional)</label>
+                <input type="text" id="aliasDominio" placeholder="Alias (opcional)">
+            </div>
+            <button class="jure" type="submit">Agregar</button>
+        </form>
+    </div>
+</div>
+
+<!-- Botón para abrir el modal -->
+<button id="openModal" class="jure">Agregar Dominio o IP</button>
+
+        <h1 class="mb-5">Lista de Dominios o IPs</h1>
+        <table id="listaDominios" class="table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Alias</th>
+                    <th>IP</th>
+                    <th>Estado</th>
+                    <th>Fecha de Creación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Los dominios se agregarán aquí dinámicamente -->
+            </tbody>
+        </table>
+        
+    </div>
+    <footer>
+        <p>&copy; 2025 upPing. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- Scripts al final del body -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.34/moment-timezone-with-data.min.js"></script>
+    <script src="/js/script.js" defer></script>
+</body>
+</html>
