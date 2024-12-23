@@ -65,6 +65,31 @@ table th, table td {
     border: 1px solid #555; /* Borde de las celdas en un gris más claro */
 }
 
+
+/* En public/css/styles.css */
+button {
+    margin: 5px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button.activarPing {
+    background-color: #28a745; /* Verde */
+    color: white;
+}
+
+button.detenerPing {
+    background-color: #dc3545; /* Rojo */
+    color: white;
+}
+
+button:disabled {
+    background-color: #ccc; /* Gris */
+    cursor: not-allowed;
+}
+
 table th {
     background-color: #555; /* Color de fondo gris más claro para los encabezados */
     font-weight: bold; /* Negrita para los encabezados */
