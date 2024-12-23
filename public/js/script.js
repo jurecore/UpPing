@@ -25,80 +25,135 @@ async function cargarDominios() {
     try {
         const response = await fetch('/api/dominios');
         const dominios = await response.json();
-        console.log(dominios); // Verifica que los dominios se carguen correctamente
         const lista = document.getElementById('listaDominios').getElementsByTagName('tbody')[0];
         lista.innerHTML = ''; // Limpiar la lista antes de agregar nuevos elementos
 
         dominios.forEach(dominio => {
             const row = lista.insertRow();
             row.innerHTML = `
-                <td>
-                    ${dominio.nombre}
-
-                </td>
+                <td>${dominio.nombre}</td>
                 <td>${dominio.alias}</td>
                 <td>${dominio.ip}</td>
-                <td><span class="estado ${dominio.activo ? 'activo' : 'inactivo'}"></span> ${dominio.activo ? 'Activo' : 'Inactivo'} </td>
-                <td>${moment(dominio.fechaCreacion).tz('America/Santiago').format('YYYY-MM-DDTHH:mm:ssZ')}</td>
+                <td><span class="estado ${dominio.activo ? 'activo' : 'inactivo'}"></span> ${dominio.activo ? 'Activo' : 'Inactivo'}</td>
+                <td>${moment(dominio.fechaCreacion).tz('America/Santiago').format('YYYY-MM-DD HH:mm')} hrs</td>
                 <td>
-                    <button class="detalles" onclick="window.location.href='/detalles/${dominio._id}'">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    ${!dominio.activo ? `<button class="eliminar" data-id="${dominio._id}">Eliminar</button>` : ''}
+                    <button class="detalles" onclick="window.location.href='/detalles/${dominio._id}'"><i class="fas fa-eye"></i></button>
+                    <button class="activarPing" data-id="${dominio._id}" ${dominio.activo ? 'disabled' : ''}>Activar</button>
+                    <button class="detenerPing" data-id="${dominio._id}" ${dominio.activo ? '' : 'disabled'}>Detener</button>
                 </td>
-                
             `;
         });
 
         // Inicializar DataTables
         $('#listaDominios').DataTable();
+
+        // Agregar eventos a los botones de activar y detener
+        agregarEventosBotones();
     } catch (error) {
         console.error('Error al cargar dominios:', error);
     }
 }
 
 
-document.addEventListener('click', async (e) => {
-    if (e.target.classList.contains('eliminar')) {
-        const dominioId = e.target.getAttribute('data-id');
+// Función para agregar eventos a los botones de activar y detener
+function agregarEventosBotones() {
+    const activarButtons = document.querySelectorAll('.activarPing');
+    const detenerButtons = document.querySelectorAll('.detenerPing');
 
-        // Usar SweetAlert2 para la confirmación
-        const { value: confirmacion } = await Swal.fire({
-            title: '¿Estás seguro?',
-            text: "¡No podrás revertir esto!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d14529',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Sí, eliminarlo!',
-            cancelButtonText: 'Cancelar'
+    activarButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            const dominioId = button.getAttribute('data-id');
+            await activarDominio(dominioId);
+        });
+    });
+
+    detenerButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            const dominioId = button.getAttribute('data-id');
+            await detenerDominio(dominioId);
+        });
+    });
+}
+
+// Función para activar un dominio
+// Función para activar un dominio
+async function activarDominio(dominioId) {
+    try {
+        const response = await fetch(`/api/dominios/${dominioId}/activar`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
 
-        if (confirmacion) {
-            try {
-                const response = await fetch(`/api/dominios/${dominioId}`, {
-                    method: 'DELETE',
-                });
-                const data = await response.json();
-                Swal.fire({
-                    title: 'Eliminado!',
-                    text: data.message,
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar'
-                });
-                cargarDominios(); // Recargar la lista de dominios
-            } catch (error) {
-                console.error('Error al eliminar el dominio:', error);
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Error al eliminar el dominio',
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar'
-                });
-            }
+        if (response.ok) {
+            const data = await response.json();
+            Swal.fire({
+                title: 'Éxito!',
+                text: data.message,
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+            cargarDominios(); // Recargar la lista de dominios
+        } else {
+            const errorData = await response.json();
+            Swal.fire({
+                title: 'Error!',
+                text: ' Error al activar el ping: ' + errorData.error,
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
         }
+    } catch (error) {
+        console.error('Error al activar el dominio:', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'Ocurrió un error al intentar activar el dominio',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
     }
-});
+}
+
+
+// Función para detener un dominio
+async function detenerDominio(dominioId) {
+    try {
+        const response = await fetch(`/api/dominios/${dominioId}/detener`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            Swal.fire({
+                title: 'Éxito!',
+                text: data.message,
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+            cargarDominios(); // Recargar la lista de dominios
+        } else {
+            const errorData = await response.json();
+            Swal.fire({
+                title: 'Error!',
+                text: 'Error al detener el ping: ' + errorData.error,
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    } catch (error) {
+        console.error('Error al detener el dominio:', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'Ocurrió un error al intentar detener el dominio',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
+    }
+}
 
 // Manejar el envío del formulario para agregar un dominio
 async function agregarDominio(nombreDominio) {
@@ -145,6 +200,9 @@ async function agregarDominio(nombreDominio) {
 
 // Cargar dominios al iniciar la página
 document.addEventListener('DOMContentLoaded', cargarDominios);
+
+
+
 
 // Manejar el envío del formulario para agregar un dominio
 // Manejar el envío del formulario para agregar un dominio o una IP
