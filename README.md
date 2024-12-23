@@ -8,4 +8,4 @@ npm install dotenv - Carga variables de entorno desde un archivo .env a process.
 
 npm install ping - Librería para hacer ping a direcciones IP o dominios, útil para verificar la conectividad.
 
-
+npm install nodemailer - Librería para enviar correos electrónicos desde Node.js.
