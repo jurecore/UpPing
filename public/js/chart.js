@@ -1,9 +1,11 @@
 let chart; // Variable para almacenar la instancia del gráfico
+const UMBRAL_PICO = 50;
 
 // Función principal para cargar el gráfico
 async function cargarGrafico(data) {
     if (chart) {
         chart.series[0].setData(data, true); // Actualiza los datos si el gráfico ya existe
+        chart.xAxis[0].setExtremes(data[data.length - 1][0] - 60000, data[data.length - 1][0]);
     } else {
         chart = Highcharts.stockChart('container', {
             chart: { height: 400 },
@@ -64,3 +66,14 @@ document.addEventListener('DOMContentLoaded', () => {
     obtenerDatosYActualizarGrafico(dominioId);
 });
 
+
+// Inicializar el gráfico al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
+    const dominioId = window.location.pathname.split('/').pop();
+    obtenerDatosYActualizarGrafico(dominioId);
+
+    // Configurar un intervalo para actualizar el gráfico cada 1 segundo
+    setInterval(() => {
+        obtenerDatosYActualizarGrafico(dominioId);
+    }, 500); // Actualiza cada 1000 ms (1 segundo)
+});
