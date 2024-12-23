@@ -1,4 +1,4 @@
-/* Orden jerárquico: 
+/*
 1. Funciones de verificación
 2. Funciones de carga
 3. Variables globales
@@ -18,6 +18,94 @@ async function verificarEstadoDominio(dominio) {
         tiempoDiv.innerHTML = `<p>Error al verificar el tiempo de respuesta: ${error.message}</p>`;
     }
 }
+
+document.getElementById('detenerPing').addEventListener('click', async () => {
+    const dominioId = window.location.pathname.split('/').pop(); // Obtener el ID del dominio
+
+    try {
+        const response = await fetch(`/api/dominios/${dominioId}/detener`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            Swal.fire({
+                title: 'Éxito!',
+                text: data.message,
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+
+            // Actualizar el estado del dominio en la interfaz
+            document.getElementById('detenerPing').disabled = true; // Deshabilitar el botón
+            document.getElementById('estadoDominio').innerText = 'Estado: Inactivo'; // Actualizar el estado
+        } else {
+            const errorData = await response.json();
+            Swal.fire({
+                title: 'Error!',
+                text: 'Error al detener el ping: ' + errorData.error,
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    } catch (error) {
+        console.error('Error al detener el ping:', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'Ocurrió un error al intentar detener el ping',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
+    }
+});
+
+// En public/js/detalles.js
+document.getElementById('activarPing').addEventListener('click', async () => {
+    const dominioId = window.location.pathname.split('/').pop(); // Obtener el ID del dominio
+
+    try {
+        const response = await fetch(`/api/dominios/${dominioId}/activar`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            Swal.fire({
+                title: 'Éxito!',
+                text: data.message,
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+
+            // Actualizar el estado del dominio en la interfaz
+            document.getElementById('activarPing').disabled = true; // Deshabilitar el botón
+            document.getElementById('detenerPing').disabled = false; // Habilitar el botón de detener ping
+            document.getElementById('estadoDominio').innerText = 'Estado: Activo'; // Actualizar el estado
+        } else {
+            const errorData = await response.json();
+            Swal.fire({
+                title: 'Error!',
+                text: 'Error al activar el ping: ' + errorData.error,
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    } catch (error) {
+        console.error('Error al activar el ping:', error);
+        Swal.fire({
+            title: 'Error!',
+            text: 'Ocurrió un error al intentar activar el ping',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
+    }
+});
 
 async function verificarTiempoRespuesta(dominio, dominioId) {
     const tiempoDiv = document.getElementById('tiempoRespuesta');
