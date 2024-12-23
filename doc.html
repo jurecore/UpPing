@@ -74,34 +74,34 @@
 
 <div class="container">
     <img src="public/img/color.png">
-    <h1>Documentación UpPing</h1>
-    <h2>Descripción</h2>
-    <p>Este proyecto es una aplicación de monitoreo de dominios que permite verificar el estado y el tiempo de respuesta de diferentes dominios o direcciones IP.</p>
-
     <h2>Dependencias</h2>
-    <h3>Dependencias</h3>
-    <ul>
-        <li>
-            <strong>express</strong>: Framework web para Node.js que facilita la creación de aplicaciones web y APIs.
- <br><code>npm install express</code>
-        </li>
-        <li>
-            <strong>mongoose</strong>: ODM (Object Data Modeling) para MongoDB y Node.js, que proporciona una solución basada en esquemas para modelar los datos de la aplicación.
-            <br><code>npm install mongoose</code>
-        </li>
-        <li>
-            <strong>body-parser</strong>: Middleware para manejar datos de formularios y JSON en las solicitudes HTTP.
-            <br><code>npm install body-parser</code>
-        </li>
-        <li>
-            <strong>dotenv</strong>: Carga variables de entorno desde un archivo <code>.env</code> a <code>process.env</code>.
-            <br><code>npm install dotenv</code>
-        </li>
-        <li>
-            <strong>ping</strong>: Librería para hacer ping a direcciones IP o dominios.
-            <br><code>npm install ping</code>
-        </li>
-    </ul>
+<h3>Dependencias</h3>
+<ul>
+    <li>
+        <strong>express</strong>: Framework web para Node.js que facilita la creación de aplicaciones web y APIs.
+        <br><code>npm install express</code>
+    </li>
+    <li>
+        <strong>mongoose</strong>: ODM (Object Data Modeling) para MongoDB y Node.js, que proporciona una solución basada en esquemas para modelar los datos de la aplicación.
+        <br><code>npm install mongoose</code>
+    </li>
+    <li>
+        <strong>body-parser</strong>: Middleware para manejar datos de formularios y JSON en las solicitudes HTTP.
+        <br><code>npm install body-parser</code>
+    </li>
+    <li>
+        <strong>dotenv</strong>: Carga variables de entorno desde un archivo <code>.env</code> a <code>process.env</code>.
+        <br><code>npm install dotenv</code>
+    </li>
+    <li>
+        <strong>ping</strong>: Librería para hacer ping a direcciones IP o dominios.
+        <br><code>npm install ping</code>
+    </li>
+    <li>
+        <strong>nodemailer</strong>: Librería para enviar correos electrónicos desde Node.js.
+        <br><code>npm install nodemailer</code>
+    </li>
+</ul>
 
     <h3>Dependencias de Desarrollo</h3>
     <ul>
@@ -131,12 +131,14 @@
             <strong>controladores/</strong>: Contiene la lógica de negocio y las funciones que manejan las solicitudes.
             <ul>
                 <li><strong>dominioControlador.js</strong>: Controlador que maneja las operaciones relacionadas con los dominios, como agregar, obtener y eliminar dominios.</li>
+                <li><strong>mailControlador.js</strong>: Controlador que maneja el envío de correos electrónicos utilizando nodemailer.</li>
             </ul>
         </li>
         <li>
             <strong>rutas/</strong>: Define las rutas de la API y las conecta con los controladores.
             <ul>
                 <li><strong>dominioRutas.js</strong>: Archivo que define las rutas relacionadas con los dominios.</li>
+                <li><strong>mailRutas.js</strong>: Archivo que define las rutas para el envío de correos electrónicos.</li>
             </ul>
         </li>
         <li>
