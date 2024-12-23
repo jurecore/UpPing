@@ -1,10 +1,11 @@
 const Dominio = require('../modelos/Dominio');
 const dns = require('dns');
 const moment = require('moment-timezone');
+const nodemailer = require('nodemailer');
 
-/* Orden jerárquico: 
+/*
 1. Funciones de validación
-2. Funciones de manejo de dominios
+2. Funciones de manejo de dominios0
 3. Funciones de manejo de tiempos de respuesta
 4. Funciones de eliminación
 */
@@ -108,6 +109,112 @@ exports.agregarDominio = async (req, res) => {
         });
     }
 };
+
+// En controladores/dominioControlador.js
+exports.activarPing = async (req, res) => {
+    const dominioId = req.params.id;
+
+    try {
+        const dominio = await Dominio.findById(dominioId);
+        if (!dominio) {
+            return res.status(404).json({ error: 'Dominio no encontrado' });
+        }
+
+        // Activar el pingueo
+        dominio.activo = true; // Cambiar el estado a activo
+        await dominio.save();
+
+        // Enviar correo al desactivar el dominio
+        await enviarCorreoActivo(dominio.nombre);        
+
+        res.status(200).json({ message: 'Pingueo activado exitosamente', activo: true });
+    } catch (err) {
+        console.error('Error al activar el pingueo:', err);
+        res.status(500).json({ error: 'Error al activar el pingueo' });
+    }
+};
+
+exports.detenerPing = async (req, res) => {
+    const dominioId = req.params.id;
+
+    try {
+        const dominio = await Dominio.findById(dominioId);
+        if (!dominio) {
+            return res.status(404).json({ error: 'Dominio no encontrado' });
+        }
+
+        // Desactivar el pingueo
+        dominio.activo = false; // Cambiar el estado a inactivo
+        await dominio.save();
+
+        // Enviar correo al desactivar el dominio
+        await enviarCorreoDesactivacion(dominio.nombre);
+
+        res.status(200).json({ message: 'Pingueo detenido exitosamente', activo: false });
+    } catch (err) {
+        console.error('Error al detener el pingueo:', err);
+        res.status(500).json({ error: 'Error al detener el pingueo' });
+    }
+};
+
+
+async function enviarCorreoActivo(dominioNombre) {
+    const transporter = nodemailer.createTransport({
+        host: process.env.EMAIL_HOST,
+        port: process.env.EMAIL_PORT,
+        secure: true,
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
+
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: 'matiasjure298@gmail.com',
+        subject: `Dominio o host Activado: ${dominioNombre}`,
+        html: `El dominio ${dominioNombre} ha sido activado. <br> atte. Soporte de UpPing`
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log(`Correo enviado sobre la desactivación del dominio: ${dominioNombre}`);
+    } catch (error) {
+        console.error('Error al enviar el correo de desactivación:', error);
+    }
+}
+
+async function enviarCorreoDesactivacion(dominioNombre) {
+    const transporter = nodemailer.createTransport({
+        host: process.env.EMAIL_HOST,
+        port: process.env.EMAIL_PORT,
+        secure: true,
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
+
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: 'matiasjure298@gmail.com',
+        subject: `Dominio o host Desactivado: ${dominioNombre}`,
+        html: `El dominio ${dominioNombre} ha sido desactivado. <br> atte. Soporte de UpPing`
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log(`Correo enviado sobre la desactivación del dominio: ${dominioNombre}`);
+    } catch (error) {
+        console.error('Error al enviar el correo de desactivación:', error);
+    }
+}
 
 exports.agregarIpODominio = async (req, res) => {
     const { nombre, ip } = req.body;
@@ -213,20 +320,5 @@ exports.agregarTiempoRespuesta = async (req, res) => {
     } catch (err) {
         console.error('Error al agregar tiempo de respuesta:', err);
         res.status(500).json({ error: 'Error al agregar tiempo de respuesta' });
-    }
-};
-
-/* Funciones de eliminación */
-exports.eliminarDominioPorId = async (req, res) => {
-    const dominioId = req.params.id;
-    try {
-        const dominio = await Dominio.findByIdAndDelete(dominioId);
-        if (!dominio) {
-            return res.status(404).json({ error: 'Dominio no encontrado' });
-        }
-        res.status(200).json({ message: 'Dominio eliminado exitosamente' });
-    } catch (err) {
-        console.error('Error al eliminar el dominio:', err);
-        res.status(500).json({ error: 'Error al eliminar el dominio' });
     }
 };
